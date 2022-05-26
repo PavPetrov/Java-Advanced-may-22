@@ -9,34 +9,85 @@ public class p07 {
             char[] rowLine = scanner.nextLine().replaceAll(" ", "").toCharArray();
             matrix[row] = rowLine;
         }
-        int[] result = findReelQueen(matrix);
+        findReelQueen(matrix);
 
     }
 
-    private static int[] findReelQueen(char[][] matrix) {
-        boolean isValid = false;
+    private static void findReelQueen(char[][] matrix) {
         int[] result = {-1, -1};
+        boolean isRealQueen = false;
         int rows = matrix.length;
-        int cols = matrix[rows].length;
+        int cols = matrix[0].length;
         for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols ; col++) {
+            for (int col = 0; col < cols; col++) {
                 char currentChar = matrix[row][col];
-                 isValid = checkRowCol(matrix,row,col);
-                 isValid = checkDiagonals(matrix, row,col);
+                if (currentChar == 'q') {
+                    isRealQueen = rowColCheck(row, col, matrix) && diagonalCheck(row, col, matrix);
+                }
+                if (isRealQueen) {
+                    System.out.println(row + " " + col);
+                    isRealQueen = false;
+                }
             }
-
         }
-        return result;
     }
 
-    private static boolean checkRowCol(char[][] matrix, int row, int col) {
+    private static boolean diagonalCheck(int row, int col, char[][] matrix) {
+
+        // Down-Right Diagonal
+        for (int i = 1; i < matrix.length - 1; i++) {
+            if (!isInBound(row + i, col + i)) {
+                if (matrix[row + i][col + i] == 'q') {
+                    return false;
+                } else break;
+            }
+        }
+        // Up-Right Diagonal
+        for (int i = 1; i < matrix.length - 1; i++) {
+            if (!isInBound(row - i, col + i)) {
+                if (matrix[row - i][col + i] == 'q') {
+                    return false;
+                } else break;
+            }
+        }
+        //Down-Left Diagonal
+        for (int i = 1; i < matrix.length - 1; i++) {
+            if (!isInBound(row + i, col - i)) {
+                if (matrix[row + i][col - i] == 'q') {
+                    return false;
+                }
+            } else break;
+        }
+        //Up-Left Diagonal
+        for (int i = 1; i < matrix.length - 1; i++) {
+            if (!isInBound(row - i, col - i)) {
+                if (matrix[row - i][col - i] == 'q') {
+                    return false;
+                }
+            } else break;
+        }
         return true;
     }
 
-    private static boolean checkDiagonals(char[][] matrix, int row, int col) {
-      return true;
+    private static boolean isInBound(int row, int col) {
+        return (row < 0 || row > 7 || col < 0 || col > 7);
+    }
+
+    private static Boolean rowColCheck(int row, int col, char[][] matrix) {
+        int countQ = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][col] == 'q') {
+                countQ++;
+            }
+            if (matrix[row][i] == 'q') {
+                countQ++;
+            }
+        }
+        return countQ == 2;
     }
 }
+
+
 //Write a program that reads (8 x 8) matrix of characters from the console.
 // The matrix represents a chessboard with figures on it.
 // The figures can be - queens as char 'q' or any other ASCII symbol.
