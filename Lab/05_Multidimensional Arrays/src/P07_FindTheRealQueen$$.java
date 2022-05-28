@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class p07 {
+public class P07_FindTheRealQueen$$ {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         char[][] matrix = new char[8][8];
